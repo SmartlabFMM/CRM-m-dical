@@ -34,7 +34,7 @@ class MedicalConsultation(models.Model):
     symptomes  = fields.Text(string='Symptômes')
     diagnostic = fields.Text(string='Diagnostic')
 
-    #  Ordonnance intégrée (remplace medical.prescription) 
+    #  Ordonnance
     medicament_ids = fields.Many2many(
         'medical.medication',
         'consultation_medication_rel',
