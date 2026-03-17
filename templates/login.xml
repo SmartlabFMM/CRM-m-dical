@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="smartlab_login" name="SmartLab Login">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <link rel="stylesheet" href="/smartlab/static/src/scss/login.css"/>
+            </t>
+            <div class="sl-wrapper">
+                <div class="sl-left">
+                    <div class="sl-overlay"></div>
+                    <div class="sl-left-content">
+                        <div class="sl-brand">
+                            <div class="sl-logo">&#x2695;</div>
+                            <div><h1>SmartLab</h1><p class="sl-subtitle">Medical Center</p></div>
+                        </div>
+                        <div class="sl-tagline">
+                            <h2>L Innovation en HealthTech</h2>
+                            
+                        </div>
+                        <div class="sl-features">
+                            <div class="sl-feat"><span>&#x1F9CD;</span><span>Gestion des patients</span></div>
+                            <div class="sl-feat"><span>&#x1F4CB;</span><span>Suivi des medecins</span></div>
+                            <div class="sl-feat"><span>&#x1F4C5;</span><span>Rendez-vous medicaux</span></div>
+                            <div class="sl-feat"><span>&#x1F4CA;</span><span>Tableaux de bord BI</span></div>
+                        </div>
+                        <p class="sl-copy">2025 SmartLab - USCR Faculte de Medecine de Monastir</p>
+                    </div>
+                </div>
+                <div class="sl-right">
+                    <div class="sl-card">
+                        <div class="sl-card-header">
+                            <div class="sl-card-icon">&#x2695;</div>
+                            <h3>Connexion</h3>
+                            <p>Accedez a votre espace SmartLab</p>
+                        </div>
+                        <div class="sl-badges">
+                            <button type="button" class="sl-badge sl-badge-admin" onclick="document.getElementById('login').value='admin@exemple.com';document.getElementById('login').focus();">Admin</button>
+                            <button type="button" class="sl-badge sl-badge-sec" onclick="document.getElementById('login').value='secretaire@exemple.com';document.getElementById('login').focus();">Secretaire</button>
+                            <button type="button" class="sl-badge sl-badge-doc" onclick="document.getElementById('login').value='medecin@exemple.com';document.getElementById('login').focus();">Medecin</button>
+                        </div>
+                        <form action="/web/login" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <t t-if="error"><div class="sl-alert sl-alert-error"><t t-esc="error"/></div></t>
+                            <t t-if="message"><div class="sl-alert sl-alert-info"><t t-esc="message"/></div></t>
+                            <div class="sl-field">
+                                <label for="login">Adresse email</label>
+                                <div class="sl-input-wrap">
+                                    <input type="text" name="login" id="login" t-att-value="login" placeholder="admin@exemple.com" required="required" autofocus="autofocus"/>
+                                </div>
+                            </div>
+                            <div class="sl-field">
+                                <label for="password">Mot de passe</label>
+                                <div class="sl-input-wrap">
+                                    <input type="password" name="password" id="password" placeholder="........" required="required" autocomplete="current-password"/>
+                                </div>
+                            </div>
+                            <button type="submit" class="sl-btn">Se connecter</button>
+                            <div class="sl-forgot">
+                                <a t-if="reset_password_enabled" href="/web/reset_password">Mot de passe oublie ?</a>
+                            </div>
+                        </form>
+                        <div class="sl-card-footer"><p>Systeme reserve au personnel autorise</p></div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

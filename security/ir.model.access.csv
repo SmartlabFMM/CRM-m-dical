@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_medical_doctor,medical.doctor,model_medical_doctor,base.group_user,1,1,1,1
+access_medical_room,medical.room,model_medical_room,base.group_user,1,1,1,1
+access_medical_specialty,medical.specialty,model_medical_specialty,base.group_user,1,1,1,1
+access_medical_patient,medical.patient,model_medical_patient,base.group_user,1,1,1,1
+access_medical_rendezvous,medical.rendezvous,model_medical_rendezvous,base.group_user,1,1,1,1
+access_medical_consultation,medical.consultation,model_medical_consultation,base.group_user,1,1,1,1
+access_medical_medication,medical.medication,model_medical_medication,base.group_user,1,1,1,1
+access_medical_facture,medical.facture,model_medical_facture,base.group_user,1,1,1,1
+access_medical_assurance,medical.assurance,model_medical_assurance,base.group_user,1,1,1,1
+access_medical_location,medical.location,model_medical_location,base.group_user,1,1,1,1

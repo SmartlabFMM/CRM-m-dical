@@ -1,0 +1,49 @@
+<odoo>
+
+<record id="view_medical_medication_form" model="ir.ui.view">
+<field name="name">medical.medication.form</field>
+<field name="model">medical.medication</field>
+<field name="arch" type="xml">
+<form string="Médicament">
+<header>
+<button name="reapprovisionner" string="Réapprovisionner" type="object" class="btn-warning" invisible="not alerte_stock"/>
+</header>
+<sheet>
+<div class="alert alert-warning" role="alert" invisible="not alerte_stock"> ⚠️ Stock bas ! Pensez à réapprovisionner. </div>
+<group>
+<group string="Informations">
+<field name="nom"/>
+<field name="substance_active"/>
+<field name="forme"/>
+</group>
+<group string="Stock">
+<field name="quantite_stock" readonly="1"/>
+<field name="quantite_min"/>
+<field name="id_emplacement"/>
+<field name="alerte_stock" widget="boolean" readonly="1"/>
+</group>
+</group>
+</sheet>
+</form>
+</field>
+</record>
+<record id="view_medical_medication_list" model="ir.ui.view">
+<field name="name">medical.medication.list</field>
+<field name="model">medical.medication</field>
+<field name="arch" type="xml">
+<list string="Médicaments" decoration-danger="alerte_stock == True">
+<field name="nom"/>
+<field name="substance_active"/>
+<field name="forme"/>
+<field name="quantite_stock"/>
+<field name="quantite_min"/>
+<field name="alerte_stock" widget="boolean" readonly="1"/>
+</list>
+</field>
+</record>
+<record id="action_medical_medication" model="ir.actions.act_window">
+<field name="name">Médicaments</field>
+<field name="res_model">medical.medication</field>
+<field name="view_mode">list,form</field>
+</record>
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_medical_doctor_form" model="ir.ui.view">
+        <field name="name">medical.doctor.form</field>
+        <field name="model">medical.doctor</field>
+        <field name="arch" type="xml">
+            <form string="Médecin">
+              <header>
+              
+    <button name="action_set_on_leave"
+            string="Mettre en congé"
+            type="object"
+            class="btn-warning"
+            invisible="state != 'active'"/>
+  
+    <button name="action_set_active"
+            string="Réactiver"
+            type="object"
+            class="btn-success"
+            invisible="state == 'active'"/>
+           
+    <field name="state" widget="statusbar"
+           statusbar_visible="active,on_leave,inactive"/>
+</header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="reference"/>
+                        <h2><field name="reference" readonly="1"/></h2>
+                        <h1><field name="name" placeholder="Nom complet du médecin"/></h1>
+                    </div>
+
+                    <group string="Informations Personnelles">
+                        <group>
+                            <field name="cin"/>
+                            <field name="gender"/>
+                            <field name="phone"/>
+                            <field name="email" widget="email"/>
+                        </group>
+                        <group>
+                            <field name="specialty_id"/>
+                            <field name="license_number"/>
+                            <field name="years_experience"/>
+                        </group>
+                    </group>
+
+                    <group string="Planning">
+                        <group>
+                            <field name="room_id"/>
+                            <field name="consultation_duration"/>
+                        </group>
+                        <group>
+                            <field name="working_hours"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    * LIST VIEW 
+    <record id="view_medical_doctor_list" model="ir.ui.view">
+        <field name="name">medical.doctor.list</field>
+        <field name="model">medical.doctor</field>
+        <field name="arch" type="xml">
+            <list string="Médecins">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="specialty_id"/>
+                <field name="phone"/>
+                <field name="room_id"/>
+                <field name="consultation_duration"/>
+                <field name="state" decoration-success="state == 'active'"
+                       decoration-warning="state == 'on_leave'"
+                       decoration-muted="state == 'inactive'"/>
+            </list>
+        </field>
+    </record>
+
+    **SEARCH VIEW  
+    <record id="view_medical_doctor_search" model="ir.ui.view">
+        <field name="name">medical.doctor.search</field>
+        <field name="model">medical.doctor</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un médecin">
+                <field name="name" string="Nom"/>
+                <field name="specialty_id" string="Spécialité"/>
+                <field name="cin" string="CIN"/>
+                <separator/>
+                <filter string="Actifs" name="active_doctors" domain="[('state','=','active')]"/>
+                <filter string="En congé" name="on_leave" domain="[('state','=','on_leave')]"/>
+                <separator/>
+                <filter string="Par Spécialité" name="group_specialty" context="{'group_by': 'specialty_id'}"/>
+                <filter string="Par Statut" name="group_state" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    ##ACTION 
+    <record id="action_medical_doctor" model="ir.actions.act_window">
+        <field name="name">Médecins</field>
+        <field name="res_model">medical.doctor</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_medical_doctor_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ajouter votre premier médecin
+            </p>
+        </field>
+    </record>
+
+    # SÉQUENCE 
+    <record id="seq_medical_doctor" model="ir.sequence">
+        <field name="name">Séquence Médecin</field>
+        <field name="code">medical.doctor</field>
+        <field name="prefix">MED</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+</odoo>

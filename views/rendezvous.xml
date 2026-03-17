@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+#sequence
+    <record id="seq_medical_appointment" model="ir.sequence">
+        <field name="name">Rendez-vous</field>
+        <field name="code">medical.appointment</field>
+        <field name="prefix">RDV/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+    <record id="view_medical_rendezvous_form" model="ir.ui.view">
+        <field name="name">medical.rendezvous.form</field>
+        <field name="model">medical.rendezvous</field>
+        <field name="arch" type="xml">
+            <form string="Rendez-vous">
+                <header>
+                    <button name="confirmer" string="Confirmer" type="object" class="btn-primary"
+                            invisible="etat != 'brouillon'"/>
+                    <button name="annuler" string="Annuler" type="object"
+                            invisible="etat == 'annule'"/>
+                    <field name="etat" widget="statusbar"
+                           statusbar_visible="brouillon,confirme,en_cours,termine"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Informations">
+                            <field name="reference" readonly="1"/>
+                            <field name="patient_id"/>
+                            <field name="medecin_id"/>
+                            <field name="salle_id"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="date_debut"/>
+                            <field name="date_fin"/>
+                        </group>
+                    </group>
+                    <group string="Motif">
+                        <field name="motif" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_rendezvous_list" model="ir.ui.view">
+        <field name="name">medical.rendezvous.list</field>
+        <field name="model">medical.rendezvous</field>
+        <field name="arch" type="xml">
+            <list string="Rendez-vous">
+                <field name="reference"/>
+                <field name="patient_id"/>
+                <field name="medecin_id"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="etat" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_medical_rendezvous_calendar" model="ir.ui.view">
+        <field name="name">medical.rendezvous.calendar</field>
+        <field name="model">medical.rendezvous</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendrier Rendez-vous" date_start="date_debut" color="medecin_id">
+                <field name="patient_id"/>
+                <field name="medecin_id"/>
+            </calendar>
+        </field>
+    </record>
+
+
+    <record id="action_medical_rendezvous" model="ir.actions.act_window">
+        <field name="name">Rendez-vous</field>
+        <field name="res_model">medical.rendezvous</field>
+        <field name="view_mode">list,form,calendar</field>
+    </record>
+
+</odoo>

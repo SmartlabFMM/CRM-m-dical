@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="seq_medical_facture" model="ir.sequence">
+    <field name="name">Facture Médicale</field>
+    <field name="code">medical.facture</field>
+    <field name="prefix">FAC/%(year)s/</field>
+    <field name="padding">4</field>
+</record>
+    <record id="view_medical_facture_form" model="ir.ui.view">
+        <field name="name">medical.facture.form</field>
+        <field name="model">medical.facture</field>
+        <field name="arch" type="xml">
+            <form string="Facture Médicale">
+                <header>
+                
+                    <button name="valider" string="Valider" type="object" class="btn-primary" invisible="etat != 'brouillon'"/>
+                    <button name="payer" string="Marquer Payée" type="object" class="btn-success" invisible="etat != 'valide'"/>
+                    <button name="calculer_montants" string="Recalculer" type="object" invisible="etat != 'brouillon'"/>
+                    <field name="etat" widget="statusbar" statusbar_visible="brouillon,valide,payee"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Informations">
+                            <field name="consultation_id"/>
+                            <field name="patient_id"/>
+                            <field name="date_facture"/>
+                        </group>
+                        <group string="Assurance">
+                            <field name="assurance_id"/>
+                        </group>
+                    </group>
+                    <group string="Montants">
+                        <group>
+                            <field name="montant_total"/>
+                        </group>
+                        <group>
+                            <field name="montant_assurance" readonly="1"/>
+                            <field name="montant_patient" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_facture_list" model="ir.ui.view">
+        <field name="name">medical.facture.list</field>
+        <field name="model">medical.facture</field>
+        <field name="arch" type="xml">
+            <list string="Factures" decoration-success="etat=='payee'" decoration-warning="etat=='valide'" decoration-muted="etat=='annulee'">
+                <field name="reference"/>
+                <field name="patient_id"/>
+                <field name="date_facture"/>
+                <field name="montant_total"/>
+                <field name="montant_assurance"/>
+                <field name="montant_patient"/>
+                <field name="etat" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+   
+
+</odoo>

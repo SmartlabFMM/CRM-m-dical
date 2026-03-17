@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_medical_assurance_form" model="ir.ui.view">
+        <field name="name">medical.assurance.form</field>
+        <field name="model">medical.assurance</field>
+        <field name="arch" type="xml">
+            <form string="Assurance Médicale">
+                <header>
+                    <field name="actif" widget="boolean_toggle"/>
+
+
+       
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="nom" placeholder="Nom de la compagnie..."/>
+                        </h1>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="voir_patients" type="object" icon="fa-users">
+                            <field name="nombre_patients" string="Patients" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" name="voir_factures" type="object" icon="fa-file-text-o">
+                            <field name="nombre_factures" string="Factures" widget="statinfo"/>
+                        </button>
+        
+                    </div>
+                    <group>
+                        <group string="Informations">
+                            <field name="nom"/>
+                            <field name="code"/>
+                            <field name="taux_couverture" widget="percentage"/>
+                        </group>
+                        <group string="Contact">
+                            <field name="telephone"/>
+                            <field name="email" widget="email"/>
+                            <field name="adresse"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_assurance_list" model="ir.ui.view">
+        <field name="name">medical.assurance.list</field>
+        <field name="model">medical.assurance</field>
+        <field name="arch" type="xml">
+            <list string="Assurances">
+                <field name="nom"/>
+                <field name="code"/>
+                <field name="taux_couverture"/>
+                <field name="telephone"/>
+                <field name="email"/>
+                <field name="nombre_patients"/>
+                <field name="actif" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_medical_assurance_search" model="ir.ui.view">
+        <field name="name">medical.assurance.search</field>
+        <field name="model">medical.assurance</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une assurance">
+                <field name="nom"/>
+                <field name="code"/>
+                <filter string="Actives" name="actives" domain="[('actif','=',True)]"/>
+                <filter string="Inactives" name="inactives" domain="[('actif','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_medical_assurance" model="ir.actions.act_window">
+        <field name="name">Assurances</field>
+        <field name="res_model">medical.assurance</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_medical_assurance_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ajouter une nouvelle compagnie d'assurance
+            </p>
+        </field>
+    </record>
+
+</odoo>

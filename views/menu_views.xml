@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    
+  
+
+    <record id="action_medical_doctor" model="ir.actions.act_window">
+        <field name="name">Médecins</field>
+        <field name="res_model">medical.doctor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_medical_patient" model="ir.actions.act_window">
+        <field name="name">Dossiers Patients</field>
+        <field name="res_model">medical.patient</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_medical_room" model="ir.actions.act_window">
+        <field name="name">Salles</field>
+        <field name="res_model">medical.room</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_medical_medication" model="ir.actions.act_window">
+        <field name="name">Médicaments</field>
+        <field name="res_model">medical.medication</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_medical_facture" model="ir.actions.act_window">
+        <field name="name">Factures</field>
+        <field name="res_model">medical.facture</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+  
+
+    <menuitem id="menu_smartlab_root" name="SmartLab" sequence="10"/>
+
+    <menuitem id="menu_medical_staff" name="Personnel Médical" parent="menu_smartlab_root" sequence="10"/>
+    <menuitem id="menu_medical_doctor" name="Médecins" parent="menu_medical_staff" action="action_medical_doctor" sequence="10"/>
+
+    <menuitem id="menu_medical_patients" name="Patients" parent="menu_smartlab_root" sequence="20"/>
+    <menuitem id="menu_medical_patient" name="Dossiers Patients" parent="menu_medical_patients" action="action_medical_patient" sequence="10"/>
+    <menuitem id="menu_medical_assurance" name="Assurances" parent="menu_medical_patients" action="action_medical_assurance" sequence="20"/>
+
+    <menuitem id="menu_medical_planning" name="Planification" parent="menu_smartlab_root" sequence="30"/>
+    <menuitem id="menu_medical_appointment" name="Rendez-vous" parent="menu_medical_planning" action="action_medical_rendezvous" sequence="10"/>
+    <menuitem id="menu_medical_room" name="Salles" parent="menu_medical_planning" action="action_medical_room" sequence="20"/>
+
+    <menuitem id="menu_medical_consult" name="Consultations" parent="menu_smartlab_root" sequence="40"/>
+    <menuitem id="menu_medical_consultation" name="Consultations" parent="menu_medical_consult" action="action_medical_consultation" sequence="10"/>
+
+    <menuitem id="menu_medical_pharmacy" name="Pharmacie" parent="menu_smartlab_root" sequence="50"/>
+    <menuitem id="menu_medical_medication" name="Médicaments" parent="menu_medical_pharmacy" action="action_medical_medication" sequence="10"/>
+
+    <menuitem id="menu_medical_billing" name="Facturation" parent="menu_smartlab_root" sequence="60"/>
+    <menuitem id="menu_medical_facture" name="Factures" parent="menu_medical_billing" action="action_medical_facture" sequence="10"/>
+
+</odoo>

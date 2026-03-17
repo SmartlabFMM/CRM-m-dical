@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_medical_consultation_form" model="ir.ui.view">
+        <field name="name">medical.consultation.form</field>
+        <field name="model">medical.consultation</field>
+        <field name="arch" type="xml">
+            <form string="Consultation">
+                <header>
+                    <button name="terminer" string="Terminer" type="object" class="btn-primary"
+                            invisible="etat != 'en_cours'"/>
+                    <button name="creer_facture" string="Créer Facture" type="object" class="btn-success"
+                            invisible="etat != 'termine' or facture_id != 0"/>
+                    <button name="imprimer" string="Imprimer" type="object"/>
+                    <field name="etat" widget="statusbar" statusbar_visible="en_cours,termine"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Informations">
+                            <field name="rendez_vous_id"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="medecin_id" readonly="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Facturation">
+                            <field name="facture_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Compte rendu médical">
+                        <field name="symptomes" placeholder="Symptômes constatés..." nolabel="1"/>
+                        <field name="diagnostic" placeholder="Diagnostic du médecin..." nolabel="1"/>
+                    </group>
+                    <group string="Ordonnance">
+                        <field name="medicament_ids" widget="many2many_tags" string="Médicaments prescrits"/>
+                        <field name="posologie" placeholder="Ex: 1 comprimé matin et soir..." nolabel="1"/>
+                        <field name="duree_traitement"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_consultation_list" model="ir.ui.view">
+        <field name="name">medical.consultation.list</field>
+        <field name="model">medical.consultation</field>
+        <field name="arch" type="xml">
+            <list string="Consultations">
+                <field name="date"/>
+                <field name="patient_id"/>
+                <field name="medecin_id"/>
+                <field name="diagnostic"/>
+                <field name="medicament_ids" widget="many2many_tags"/>
+                <field name="etat" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_medical_consultation_search" model="ir.ui.view">
+        <field name="name">medical.consultation.search</field>
+        <field name="model">medical.consultation</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une consultation">
+                <field name="patient_id"/>
+                <field name="medecin_id"/>
+                <filter string="En cours" name="en_cours" domain="[('etat','=','en_cours')]"/>
+                <filter string="Terminées" name="terminees" domain="[('etat','=','termine')]"/>
+                <separator/>
+                <filter name="par_medecin" string="Médecin" context="{'group_by': 'medecin_id'}"/>
+                <filter name="par_patient" string="Patient" context="{'group_by': 'patient_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_medical_consultation" model="ir.actions.act_window">
+        <field name="name">Consultations</field>
+        <field name="res_model">medical.consultation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_medical_consultation_search"/>
+    </record>
+</odoo>

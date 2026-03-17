@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_medical_room_form" model="ir.ui.view">
+        <field name="name">medical.room.form</field>
+        <field name="model">medical.room</field>
+        <field name="arch" type="xml">
+            <form string="Salle de Consultation">
+                <header>
+                    <!-- Boutons pour changer l'état -->
+                    <button name="action_set_available"
+                            string="Disponible"
+                            type="object"
+                            class="btn-success"
+                            invisible="state == 'available'"/>
+                    <button name="action_set_occupied"
+                            string="Occupée"
+                            type="object"
+                            class="btn-warning"
+                            invisible="state == 'occupied'"/>
+                    <button name="action_set_maintenance"
+                            string="En maintenance"
+                            type="object"
+                            class="btn-danger"
+                            invisible="state == 'maintenance'"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="available,occupied,maintenance"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nom de la salle"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="floor"/>
+                            <field name="capacity"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_room_list" model="ir.ui.view">
+        <field name="name">medical.room.list</field>
+        <field name="model">medical.room</field>
+        <field name="arch" type="xml">
+            <list string="Salles">
+                <field name="name"/>
+                <field name="floor"/>
+                <field name="capacity"/>
+                <field name="state" decoration-success="state == 'available'"
+                       decoration-warning="state == 'maintenance'"
+                       decoration-danger="state == 'occupied'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_medical_room" model="ir.actions.act_window">
+        <field name="name">Salles de Consultation</field>
+        <field name="res_model">medical.room</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

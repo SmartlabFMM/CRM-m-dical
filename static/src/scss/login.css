@@ -1,0 +1,252 @@
+/* ═══════════════════════════════════════════════════════════════
+   SmartLab Medical Center — Login Page
+   Odoo 19
+═══════════════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Variables ──────────────────────────────────────────────── */
+:root {
+    --purple:       #6B3FA0;
+    --purple-dark:  #4A235A;
+    --purple-mid:   #8B5CC8;
+    --purple-light: #EDE7F6;
+    --white:        #FFFFFF;
+    --gray-50:      #FAFAFA;
+    --gray-100:     #F5F5F5;
+    --gray-300:     #E0E0E0;
+    --gray-500:     #9E9E9E;
+    --gray-700:     #616161;
+    --gray-900:     #212121;
+    --green:        #2E7D32;
+    --blue:         #1565C0;
+    --red:          #C62828;
+}
+
+/* ── Wrapper 2 colonnes ─────────────────────────────────────── */
+.sl-wrapper {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+
+ 
+.sl-left {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: stretch;
+
+  background-image: url('/smartlab/static/src/img/login_bg.jpg');
+
+
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    background-color: var(--purple-dark);
+}
+
+.sl-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        145deg,
+        rgba(74, 35, 90, 0.82) 0%,   /* ← Change 0.82 pour + ou - transparent */
+        rgba(107, 63, 160, 0.75) 100%
+    );
+    z-index: 1;
+}
+
+.sl-left-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+    width: 100%;
+}
+
+.sl-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.sl-logo {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.40);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+}
+.sl-brand h1 {
+    font-size: 2.6rem; font-weight: 700;
+    color: white; line-height: 1;
+}
+.sl-subtitle {
+    font-size: 0.85rem; color: rgba(255,255,255,0.65);
+    letter-spacing: 2px; text-transform: uppercase;
+    font-weight: 300;
+}
+
+.sl-tagline h2 {
+    font-size: 1.5rem; font-weight: 600;
+    color: white; margin-bottom: 0.4rem;
+}
+.sl-tagline p {
+    font-size: 0.88rem; color: rgba(255,255,255,0.60);
+}
+
+.sl-features {
+    display: flex; flex-direction: column; gap: 0.8rem;
+}
+.sl-feat {
+    display: flex; align-items: center; gap: 0.9rem;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 0.75rem 1.1rem;
+}
+.sl-feat span:first-child { font-size: 1.2rem; min-width: 26px; }
+.sl-feat span:last-child {
+    color: rgba(255,255,255,0.88);
+    font-size: 0.92rem;
+}
+
+.sl-copy {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.40);
+}
+
+
+.sl-right {
+    flex: 0 0 460px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.sl-card {
+    width: 100%; max-width: 380px;
+    display: flex; flex-direction: column; gap: 1.4rem;
+}
+.sl-card-header { text-align: center; }
+.sl-card-icon {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: var(--purple-light);
+    border: 2px solid var(--purple);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin: 0 auto 0.9rem;
+}
+.sl-card-header h3 {
+    font-size: 1.55rem; font-weight: 700;
+    color: var(--gray-900); margin-bottom: 0.25rem;
+}
+.sl-card-header p { font-size: 0.88rem; color: var(--gray-500); }
+
+.sl-badges {
+    display: flex; gap: 0.45rem;
+    justify-content: center; flex-wrap: wrap;
+}
+.sl-badge {
+    font-size: 0.73rem; font-weight: 500;
+    padding: 0.28rem 0.7rem;
+    border-radius: 20px; border: 1px solid;
+}
+.sl-badge-admin  { color: var(--purple); border-color: var(--purple); background: var(--purple-light); }
+.sl-badge-sec    { color: var(--blue);   border-color: var(--blue);   background: #E3F2FD; }
+.sl-badge-doc    { color: var(--green);  border-color: var(--green);  background: #E8F5E9; }
+
+.sl-alert {
+    padding: 0.7rem 1rem; border-radius: 10px;
+    font-size: 0.86rem; font-weight: 500;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.sl-alert-error { background: #FFEBEE; color: var(--red); border: 1px solid #FFCDD2; }
+.sl-alert-info  { background: #E3F2FD; color: var(--blue); border: 1px solid #BBDEFB; }
+
+.sl-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.sl-field label {
+    font-size: 0.83rem; font-weight: 600; color: var(--gray-700);
+}
+.sl-input-wrap { position: relative; display: flex; align-items: center; }
+.sl-icon {
+    position: absolute; left: 0.85rem;
+    font-size: 0.95rem; color: var(--gray-500);
+    pointer-events: none;
+}
+.sl-input-wrap input {
+    width: 100%;
+    padding: 0.78rem 0.85rem 0.78rem 2.6rem;
+    border: 2px solid var(--gray-300);
+    border-radius: 10px;
+    font-size: 0.93rem;
+    color: var(--gray-900);
+    background: var(--gray-50);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sl-input-wrap input:focus {
+    border-color: var(--purple);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(107,63,160,0.10);
+}
+.sl-input-wrap input::placeholder { color: var(--gray-500); }
+
+.sl-btn {
+    width: 100%;
+    padding: 0.88rem;
+    background: linear-gradient(135deg, var(--purple), var(--purple-mid));
+    color: white; border: none; border-radius: 10px;
+    font-size: 0.98rem; font-weight: 600;
+    cursor: pointer; margin-top: 0.2rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 14px rgba(107,63,160,0.30);
+}
+.sl-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(107,63,160,0.38);
+}
+.sl-btn:active { transform: translateY(0); }
+
+.sl-forgot { text-align: center; }
+.sl-forgot a {
+    font-size: 0.83rem; color: var(--purple);
+    text-decoration: none; font-weight: 500;
+}
+.sl-forgot a:hover { text-decoration: underline; }
+
+.sl-card-footer {
+    text-align: center;
+    border-top: 1px solid var(--gray-100);
+    padding-top: 0.6rem;
+}
+.sl-card-footer p { font-size: 0.73rem; color: var(--gray-500); }
+
+@media (max-width: 860px) {
+    .sl-wrapper { flex-direction: column; }
+    .sl-left {
+        min-height: 200px; flex: none;
+    }
+    .sl-left-content { padding: 1.5rem; }
+    .sl-tagline, .sl-features, .sl-copy { display: none; }
+    .sl-right { flex: 1; padding: 1.5rem; }
+}
+.sl-badge {
+    font-size: 0.73rem; font-weight: 500;
+    padding: 0.28rem 0.7rem;
+    border-radius: 20px; border: 1px solid;
+    cursor: pointer;
+    background: none;
+    transition: opacity 0.2s;
+}
+.sl-badge:hover { opacity: 0.75; }
