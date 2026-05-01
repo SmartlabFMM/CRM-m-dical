@@ -11,7 +11,6 @@
                             invisible="etat != 'en_cours'"/>
                     <button name="creer_facture" string="Créer Facture" type="object" class="btn-success"
                             invisible="etat != 'termine' or facture_id != 0"/>
-                    <button name="imprimer" string="Imprimer" type="object"/>
                     <field name="etat" widget="statusbar" statusbar_visible="en_cours,termine"/>
                 </header>
                 <sheet>
@@ -21,6 +20,9 @@
                             <field name="patient_id" readonly="1"/>
                             <field name="medecin_id" readonly="1"/>
                             <field name="date"/>
+                          
+                            <field name="tarif_consultation"
+                                   readonly="etat == 'termine'"/>
                         </group>
                         <group string="Facturation">
                             <field name="facture_id" readonly="1"/>
@@ -51,6 +53,8 @@
                 <field name="medecin_id"/>
                 <field name="diagnostic"/>
                 <field name="medicament_ids" widget="many2many_tags"/>
+                <field name="tarif_consultation"/>
+               
                 <field name="etat" widget="badge"/>
             </list>
         </field>

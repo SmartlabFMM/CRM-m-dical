@@ -52,6 +52,7 @@
                         </group>
                         <group>
                             <field name="working_hours"/>
+                            <field name="tarif_consultation"/>
                         </group>
                     </group>
                 </sheet>
@@ -72,6 +73,7 @@
                 <field name="phone"/>
                 <field name="room_id"/>
                 <field name="consultation_duration"/>
+                <field name="tarif_consultation"/>
                 <field name="state" decoration-success="state == 'active'"
                        decoration-warning="state == 'on_leave'"
                        decoration-muted="state == 'inactive'"/>

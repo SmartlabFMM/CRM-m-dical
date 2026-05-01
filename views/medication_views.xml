@@ -6,10 +6,9 @@
 <field name="arch" type="xml">
 <form string="Médicament">
 <header>
-<button name="reapprovisionner" string="Réapprovisionner" type="object" class="btn-warning" invisible="not alerte_stock"/>
 </header>
 <sheet>
-<div class="alert alert-warning" role="alert" invisible="not alerte_stock"> ⚠️ Stock bas ! Pensez à réapprovisionner. </div>
+<div class="alert alert-warning" role="alert" invisible="not alerte_stock"> ⚠️ Stock bas ! </div>
 <group>
 <group string="Informations">
 <field name="nom"/>
@@ -17,7 +16,7 @@
 <field name="forme"/>
 </group>
 <group string="Stock">
-<field name="quantite_stock" readonly="1"/>
+<field name="quantite_stock"/>
 <field name="quantite_min"/>
 <field name="id_emplacement"/>
 <field name="alerte_stock" widget="boolean" readonly="1"/>
@@ -37,7 +36,7 @@
 <field name="forme"/>
 <field name="quantite_stock"/>
 <field name="quantite_min"/>
-<field name="alerte_stock" widget="boolean" readonly="1"/>
+<field name="alerte_stock" widget="boolean"/>
 </list>
 </field>
 </record>

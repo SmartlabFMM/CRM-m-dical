@@ -25,11 +25,14 @@ class MedicalDoctor(models.Model):
     )
     license_number = fields.Char(string='Numéro d\'ordre')
     years_experience = fields.Integer(string='Années d\'expérience')
-
+    tarif_consultation = fields.Float(
+    string='Tarif consultation (TND)',
+    default=0.0,
+)
     #─ Contact 
     phone = fields.Char(string='Téléphone')
     email = fields.Char(string='Email')
-
+    
     #  Planning 
     room_id = fields.Many2one('medical.room', string='Salle assignée')
     consultation_duration = fields.Integer(

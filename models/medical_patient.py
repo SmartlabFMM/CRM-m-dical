@@ -2,6 +2,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from datetime import date
+import re
 
 
 class MedicalPatient(models.Model):
@@ -76,9 +77,12 @@ class MedicalPatient(models.Model):
 
     #  Contrainte CIN unique 
     @api.constrains('cin')
-    def _check_cin_unique(self):
+    def _check_cin(self):
         for rec in self:
             if rec.cin:
+                if not re.fullmatch(r'\d{8}', rec.cin):
+                    raise ValidationError("Le CIN doit contenir exactement 8 chiffres (sans lettres).")
                 duplicate = self.search([('cin', '=', rec.cin), ('id', '!=', rec.id)])
                 if duplicate:
                     raise ValidationError(f"Un patient avec le CIN {rec.cin} existe déjà.")
+

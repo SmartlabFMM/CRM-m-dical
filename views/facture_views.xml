@@ -18,6 +18,8 @@
                     <button name="payer" string="Marquer Payée" type="object" class="btn-success" invisible="etat != 'valide'"/>
                     <button name="calculer_montants" string="Recalculer" type="object" invisible="etat != 'brouillon'"/>
                     <field name="etat" widget="statusbar" statusbar_visible="brouillon,valide,payee"/>
+                    
+
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -65,7 +67,8 @@
             </list>
         </field>
     </record>
+</odoo>
 
    
 
-</odoo>
+   

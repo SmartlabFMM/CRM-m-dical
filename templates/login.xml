@@ -23,7 +23,7 @@
                             <div class="sl-feat"><span>&#x1F4C5;</span><span>Rendez-vous medicaux</span></div>
                             <div class="sl-feat"><span>&#x1F4CA;</span><span>Tableaux de bord BI</span></div>
                         </div>
-                        <p class="sl-copy">2025 SmartLab - USCR Faculte de Medecine de Monastir</p>
+                        <p class="sl-copy">2026 SmartLab </p>
                     </div>
                 </div>
                 <div class="sl-right">
@@ -55,9 +55,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="sl-btn">Se connecter</button>
-                            <div class="sl-forgot">
-                                <a t-if="reset_password_enabled" href="/web/reset_password">Mot de passe oublie ?</a>
-                            </div>
+
                         </form>
                         <div class="sl-card-footer"><p>Systeme reserve au personnel autorise</p></div>
                     </div>

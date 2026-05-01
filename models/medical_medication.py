@@ -28,8 +28,7 @@ class MedicalMedication(models.Model):
     # Stock
     quantite_stock = fields.Float(
         string='Quantité en stock',
-        compute='_calculer_stock',
-        store=True
+        
     )
     quantite_min = fields.Float(
         string='Quantité minimale',
@@ -55,26 +54,4 @@ class MedicalMedication(models.Model):
         for rec in self:
             rec.alerte_stock = rec.quantite_stock < rec.quantite_min
 
-    @api.depends()
-    def _calculer_stock(self):
-        """
-        Ici vous pouvez calculer la quantité réelle selon vos mouvements internes
-        pour l’instant on initialise à 0.0 par défaut.
-        """
-        for rec in self:
-            rec.quantite_stock = 0.0
-
-    def reapprovisionner(self):
-        """
-        Cette méthode peut être étendue pour créer des commandes internes
-        de réapprovisionnement dans votre module SmartLab
-        """
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Réapprovisionnement',
-            'res_model': 'stock.picking', 
-            'view_mode': 'form',
-        }
-
-   
+    

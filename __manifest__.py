@@ -3,7 +3,7 @@
     'version': '19.0.1.0.0',
     'category': 'Healthcare',
     'summary': 'Complete Medical Center Management System',
-    'depends': ['base', 'mail', 'contacts'],
+    'depends': ['base', 'mail',],
     'license': 'LGPL-3',
     'data': [
         'security/groups.xml', 
@@ -17,14 +17,18 @@
         'views/medication_views.xml',
         'views/facture_views.xml',
         'views/assurance_views.xml',
-        'views/room_views.xml',
+        'views/room_views.xml', 
         'templates/login.xml',
         'views/menu_views.xml',
+        
 
     ],
     'assets': {
     'web.assets_frontend': [
         'smartlab/static/src/scss/login.css', 
+    ],
+    'web.assets_backend': [
+        'smartlab/static/src/js/powerbi_dashboard.js',
     ],
 },
      'installable': True,
