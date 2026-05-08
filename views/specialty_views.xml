@@ -44,5 +44,12 @@
         <field name="res_model">medical.specialty</field>
         <field name="view_mode">list,form</field>
     </record>
+ <menuitem 
+        id="menu_medical_specialty"
+        name="Spécialités"
+        parent="menu_medical_staff"
+        action="action_medical_specialty"
+        sequence="20"/>
+
 
 </odoo>

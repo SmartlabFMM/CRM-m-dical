@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <record id="view_medical_assurance_form" model="ir.ui.view">
+ <record id="view_medical_assurance_form" model="ir.ui.view">
         <field name="name">medical.assurance.form</field>
         <field name="model">medical.assurance</field>
         <field name="arch" type="xml">
             <form string="Assurance Médicale">
                 <header>
-                    <field name="actif" widget="boolean_toggle"/>
-
-
-       
+                    <!-- Boutons Smart Buttons → ouvrir patients et factures liés -->
+                    <button name="voir_patients" string="Voir Patients" type="object"
+                            class="btn-secondary"
+                            invisible="nombre_patients == 0"/>
+                    <button name="voir_factures" string="Voir Factures" type="object"
+                            class="btn-secondary"
+                            invisible="nombre_factures == 0"/>
                 </header>
                 <sheet>
+                    <!-- Compteurs en haut du formulaire -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="voir_patients" type="object"
+                                class="oe_stat_button" icon="fa-user">
+                            <field name="nombre_patients" widget="statinfo"
+                                   string="Patients"/>
+                        </button>
+                        <button name="voir_factures" type="object"
+                                class="oe_stat_button" icon="fa-file-text">
+                            <field name="nombre_factures" widget="statinfo"
+                                   string="Factures"/>
+                        </button>
+                    </div>
+ 
+                    <!-- Badge Actif/Inactif -->
+                    <widget name="web_ribbon" title="Inactif"
+                            bg_color="bg-danger"
+                            invisible="actif == True"/>
+ 
                     <div class="oe_title">
                         <h1>
                             <field name="nom" placeholder="Nom de la compagnie..."/>
                         </h1>
                     </div>
-                    <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" name="voir_patients" type="object" icon="fa-users">
-                            <field name="nombre_patients" string="Patients" widget="statinfo"/>
-                        </button>
-                        <button class="oe_stat_button" name="voir_factures" type="object" icon="fa-file-text-o">
-                            <field name="nombre_factures" string="Factures" widget="statinfo"/>
-                        </button>
-        
-                    </div>
+ 
                     <group>
-                        <group string="Informations">
-                            <field name="nom"/>
+                        <group string="Identification">
                             <field name="code"/>
-                            <field name="taux_couverture" widget="percentage"/>
+                            <field name="taux_couverture"
+                                   widget="percentage"/>
+                            <field name="actif"/>
                         </group>
                         <group string="Contact">
                             <field name="telephone"/>
@@ -39,28 +53,55 @@
                             <field name="adresse"/>
                         </group>
                     </group>
+ 
+                    <notebook>
+                        <page string="Patients couverts" name="patients">
+                            <field name="patient_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="age"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Factures" name="factures">
+                            <field name="facture_ids" readonly="1">
+                                <list decoration-success="etat == 'payee'"
+                                      decoration-warning="etat == 'valide'"
+                                      decoration-muted="etat == 'annulee'">
+                                    <field name="reference"/>
+                                    <field name="patient_id"/>
+                                    <field name="date_facture"/>
+                                    <field name="montant_total"/>
+                                    <field name="montant_assurance"/>
+                                    <field name="montant_patient"/>
+                                    <field name="etat" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
                 <chatter/>
             </form>
         </field>
     </record>
-
+ 
     <record id="view_medical_assurance_list" model="ir.ui.view">
         <field name="name">medical.assurance.list</field>
         <field name="model">medical.assurance</field>
         <field name="arch" type="xml">
-            <list string="Assurances">
+            <list string="Assurances"
+                  decoration-muted="actif == False">
                 <field name="nom"/>
                 <field name="code"/>
-                <field name="taux_couverture"/>
+                <field name="taux_couverture" widget="percentage"/>
                 <field name="telephone"/>
-                <field name="email"/>
                 <field name="nombre_patients"/>
+                <field name="nombre_factures"/>
                 <field name="actif" widget="boolean_toggle"/>
             </list>
         </field>
     </record>
-
+ 
     <record id="view_medical_assurance_search" model="ir.ui.view">
         <field name="name">medical.assurance.search</field>
         <field name="model">medical.assurance</field>
@@ -68,22 +109,19 @@
             <search string="Rechercher une assurance">
                 <field name="nom"/>
                 <field name="code"/>
-                <filter string="Actives" name="actives" domain="[('actif','=',True)]"/>
-                <filter string="Inactives" name="inactives" domain="[('actif','=',False)]"/>
+                <filter string="Actives"   name="actif"
+                        domain="[('actif','=',True)]"/>
+                <filter string="Inactives" name="inactif"
+                        domain="[('actif','=',False)]"/>
             </search>
         </field>
     </record>
-
+ 
     <record id="action_medical_assurance" model="ir.actions.act_window">
         <field name="name">Assurances</field>
         <field name="res_model">medical.assurance</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_medical_assurance_search"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Ajouter une nouvelle compagnie d'assurance
-            </p>
-        </field>
     </record>
 
 </odoo>

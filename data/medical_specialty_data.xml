@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="spec_anesthesiology" model="medical.specialty">
+      <field name="name">Anesthesiology</field>
+    </record>
+    <record id="spec_audiology" model="medical.specialty">
+      <field name="name">Audiology &amp; Speech</field>
+    </record>
+    <record id="spec_cardiology" model="medical.specialty">
+      <field name="name">Cardiology</field>
+    </record>
+    <record id="spec_critical_care" model="medical.specialty">
+      <field name="name">Critical Care</field>
+    </record>
+    <record id="spec_dentistry" model="medical.specialty">
+      <field name="name">Dentistry</field>
+    </record>
+    <record id="spec_dermatology" model="medical.specialty">
+      <field name="name">Dermatology</field>
+    </record>
+    <record id="spec_ent" model="medical.specialty">
+      <field name="name">ENT</field>
+    </record>
+    <record id="spec_emergency" model="medical.specialty">
+      <field name="name">Emergency Medicine</field>
+    </record>
+    <record id="spec_endocrinology" model="medical.specialty">
+      <field name="name">Endocrinology</field>
+    </record>
+    <record id="spec_family" model="medical.specialty">
+      <field name="name">Family Medicine</field>
+    </record>
+    <record id="spec_gastro" model="medical.specialty">
+      <field name="name">Gastroenterology</field>
+    </record>
+    <record id="spec_general" model="medical.specialty">
+      <field name="name">General Medicine</field>
+    </record>
+    <record id="spec_geriatrics" model="medical.specialty">
+      <field name="name">Geriatrics</field>
+    </record>
+    <record id="spec_gynecology" model="medical.specialty">
+      <field name="name">Gynecology</field>
+    </record>
+    <record id="spec_hematology" model="medical.specialty">
+      <field name="name">Hematology</field>
+    </record>
+    <record id="spec_homeopathy" model="medical.specialty">
+      <field name="name">Homeopathy</field>
+    </record>
+    <record id="spec_immunology" model="medical.specialty">
+      <field name="name">Immunology</field>
+    </record>
+    <record id="spec_nephrology" model="medical.specialty">
+      <field name="name">Nephrology</field>
+    </record>
+    <record id="spec_neurology" model="medical.specialty">
+      <field name="name">Neurology</field>
+    </record>
+    <record id="spec_nutrition" model="medical.specialty">
+      <field name="name">Nutrition &amp; Dietetics</field>
+    </record>
+    <record id="spec_oncology" model="medical.specialty">
+      <field name="name">Oncology</field>
+    </record>
+    <record id="spec_orthopedics" model="medical.specialty">
+      <field name="name">Orthopedics</field>
+    </record>
+    <record id="spec_pediatrics" model="medical.specialty">
+      <field name="name">Pediatrics</field>
+    </record>
+    <record id="spec_psychiatry" model="medical.specialty">
+      <field name="name">Psychiatry</field>
+    </record>
+    <record id="spec_psychology" model="medical.specialty">
+      <field name="name">Psychology</field>
+    </record>
+    <record id="spec_pulmonology" model="medical.specialty">
+      <field name="name">Pulmonology</field>
+    </record>
+    <record id="spec_radiology" model="medical.specialty">
+      <field name="name">Radiology</field>
+    </record>
+    <record id="spec_rehabilitation" model="medical.specialty">
+      <field name="name">Rehabilitation</field>
+    </record>
+    <record id="spec_sexology" model="medical.specialty">
+      <field name="name">Sexology</field>
+    </record>
+    <record id="spec_surgery" model="medical.specialty">
+      <field name="name">Surgery</field>
+    </record>
+    <record id="spec_urology" model="medical.specialty">
+      <field name="name">Urology</field>
+    </record>
+  </data>
+</odoo>

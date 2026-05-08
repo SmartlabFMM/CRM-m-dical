@@ -8,7 +8,7 @@
     'data': [
         'security/groups.xml', 
       'security/ir.model.access.csv',
-    
+        'data/sequences.xml',
         'views/specialty_views.xml',
         'views/doctor_views.xml',
         'views/patient_views.xml',
@@ -25,10 +25,12 @@
     ],
     'assets': {
     'web.assets_frontend': [
-        'smartlab/static/src/scss/login.css', 
+        'smartlab/static/src/scss/login.css',
+      
     ],
     'web.assets_backend': [
         'smartlab/static/src/js/powerbi_dashboard.js',
+      
     ],
 },
      'installable': True,

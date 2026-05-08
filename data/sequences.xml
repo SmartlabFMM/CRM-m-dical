@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ 
+    <!-- ════════════════════════════════════════════════════════════════
+         SÉQUENCES
+    ════════════════════════════════════════════════════════════════ -->
+ 
+    <record id="seq_medical_facture" model="ir.sequence">
+        <field name="name">Facture Médicale</field>
+        <field name="code">medical.facture</field>
+        <field name="prefix">FAC/%(year)s/</field>
+        <field name="padding">4</field>
+    </record>
+ 
+    <record id="seq_medical_appointment" model="ir.sequence">
+        <field name="name">Rendez-vous</field>
+        <field name="code">medical.appointment</field>
+        <field name="prefix">RDV/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

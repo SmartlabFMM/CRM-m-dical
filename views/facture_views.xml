@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<record id="seq_medical_facture" model="ir.sequence">
-    <field name="name">Facture Médicale</field>
-    <field name="code">medical.facture</field>
-    <field name="prefix">FAC/%(year)s/</field>
-    <field name="padding">4</field>
-</record>
     <record id="view_medical_facture_form" model="ir.ui.view">
         <field name="name">medical.facture.form</field>
         <field name="model">medical.facture</field>
         <field name="arch" type="xml">
-            <form string="Facture Médicale">
+            <form string="Facture Médicale" delete="etat == 'brouillon'">
                 <header>
-                
-                    <button name="valider" string="Valider" type="object" class="btn-primary" invisible="etat != 'brouillon'"/>
-                    <button name="payer" string="Marquer Payée" type="object" class="btn-success" invisible="etat != 'valide'"/>
-                    <button name="calculer_montants" string="Recalculer" type="object" invisible="etat != 'brouillon'"/>
-                    <field name="etat" widget="statusbar" statusbar_visible="brouillon,valide,payee"/>
-                    
-
+                    <button name="valider" string="Valider" type="object"
+                            class="btn-primary"
+                            invisible="etat != 'brouillon'"/>
+                    <button name="payer" string="Marquer Payée" type="object"
+                            class="btn-success"
+                            invisible="etat != 'valide'"/>
+                    <button name="calculer_montants" string="Recalculer" type="object"
+                            invisible="etat != 'brouillon'"/>
+                    <button name="retour_brouillon" string="🔙 Remettre en Brouillon"
+                            type="object" class="btn-secondary"
+                            invisible="etat != 'valide'"/>
+                    <button name="retour_valide" string="🔙 Remettre en Validée"
+                            type="object" class="btn-secondary"
+                            invisible="etat != 'payee'"/>
+                    <field name="etat" widget="statusbar"
+                           statusbar_visible="brouillon,valide,payee"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -43,7 +46,7 @@
                         </group>
                         <group>
                             <field name="montant_assurance" readonly="1"/>
-                            <field name="montant_patient" readonly="1"/>
+                            <field name="montant_patient"   readonly="1"/>
                         </group>
                     </group>
                 </sheet>
@@ -56,19 +59,52 @@
         <field name="name">medical.facture.list</field>
         <field name="model">medical.facture</field>
         <field name="arch" type="xml">
-            <list string="Factures" decoration-success="etat=='payee'" decoration-warning="etat=='valide'" decoration-muted="etat=='annulee'">
+            <list string="Factures"
+                  delete="etat == 'brouillon'"
+                  decoration-success="etat == 'payee'"
+                  decoration-warning="etat == 'valide'"
+                  decoration-muted="etat == 'annulee'">
                 <field name="reference"/>
                 <field name="patient_id"/>
                 <field name="date_facture"/>
                 <field name="montant_total"/>
                 <field name="montant_assurance"/>
                 <field name="montant_patient"/>
-                <field name="etat" widget="badge"/>
+                <field name="etat" widget="badge"
+                       decoration-success="etat == 'payee'"
+                       decoration-warning="etat == 'valide'"
+                       decoration-muted="etat == 'annulee'"/>
             </list>
         </field>
     </record>
+
+    <record id="view_medical_facture_search" model="ir.ui.view">
+        <field name="name">medical.facture.search</field>
+        <field name="model">medical.facture</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une facture">
+                <field name="reference"/>
+                <field name="patient_id"/>
+                <filter string="Brouillon" name="brouillon"
+                        domain="[('etat','=','brouillon')]"/>
+                <filter string="Validées"  name="valide"
+                        domain="[('etat','=','valide')]"/>
+                <filter string="Payées"    name="payee"
+                        domain="[('etat','=','payee')]"/>
+                <separator/>
+                <filter name="par_patient"  string="Patient"
+                        context="{'group_by': 'patient_id'}"/>
+                <filter name="par_assurance" string="Assurance"
+                        context="{'group_by': 'assurance_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_medical_facture" model="ir.actions.act_window">
+        <field name="name">Factures</field>
+        <field name="res_model">medical.facture</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_medical_facture_search"/>
+    </record>
+
 </odoo>
-
-   
-
-   

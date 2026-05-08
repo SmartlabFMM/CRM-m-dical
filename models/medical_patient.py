@@ -55,14 +55,26 @@ class MedicalPatient(models.Model):
         ondelete='set null',
     )
 
+    # ── Workflow ─────────────────────────────────────────────────────
+    def action_nouveau_rendezvous(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Nouveau Rendez-vous',
+            'res_model': 'medical.rendezvous',
+            'view_mode': 'form',
+            'target': 'current',
+            'context': {'default_patient_id': self.id},
+        }
+
     #  Compute 
     @api.depends('birthdate')
     def _compute_age(self):
         today = date.today()
         for rec in self:
-            if rec.birthdate:
+            if rec.birthdate and rec.birthdate <= today:
                 rec.age = today.year - rec.birthdate.year - (
-                    (today.month, today.day) < (rec.birthdate.month, rec.birthdate.day)
+                    (today.month, today.day) < (rec.birthdate.month, rec.birthdate.day) 
                 )
             else:
                 rec.age = 0
@@ -86,3 +98,9 @@ class MedicalPatient(models.Model):
                 if duplicate:
                     raise ValidationError(f"Un patient avec le CIN {rec.cin} existe déjà.")
 
+    @api.constrains('birthdate')
+    def _check_date_naissance(self):
+        for rec in self:
+            if rec.birthdate and rec.birthdate > date.today():
+                raise ValidationError(f"La date de naissance ne peut pas être dans le futur. "
+                                      f"Valeur saisie : {rec.birthdate}")

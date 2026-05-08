@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="view_medical_consultation_form" model="ir.ui.view">
+  <record id="view_medical_consultation_form" model="ir.ui.view">
         <field name="name">medical.consultation.form</field>
         <field name="model">medical.consultation</field>
         <field name="arch" type="xml">
             <form string="Consultation">
                 <header>
-                    <button name="terminer" string="Terminer" type="object" class="btn-primary"
+                    <button name="terminer" string="Terminer" type="object"
+                            class="btn-primary"
                             invisible="etat != 'en_cours'"/>
-                    <button name="creer_facture" string="Créer Facture" type="object" class="btn-success"
-                            invisible="etat != 'termine' or facture_id != 0"/>
+
+                    <button name="retour_en_cours" string="🔙 Remettre En cours"
+                            type="object" class="btn-secondary"
+                            invisible="etat != 'termine'"/>
+
+                    <button name="creer_facture" string="Créer Facture" type="object"
+                            class="btn-success"
+                            invisible="etat != 'termine' or facture_id != False"/>
+
                     <field name="etat" widget="statusbar" statusbar_visible="en_cours,termine"/>
                 </header>
                 <sheet>
@@ -20,9 +28,7 @@
                             <field name="patient_id" readonly="1"/>
                             <field name="medecin_id" readonly="1"/>
                             <field name="date"/>
-                          
-                            <field name="tarif_consultation"
-                                   readonly="etat == 'termine'"/>
+                            <field name="tarif_consultation" readonly="etat == 'termine'"/>
                         </group>
                         <group string="Facturation">
                             <field name="facture_id" readonly="1"/>
@@ -31,6 +37,7 @@
                     <group string="Compte rendu médical">
                         <field name="symptomes" placeholder="Symptômes constatés..." nolabel="1"/>
                         <field name="diagnostic" placeholder="Diagnostic du médecin..." nolabel="1"/>
+                        <field name="pieces_jointes" widget="many2many_binary" string="Documents / Images" nolabel="0" colspan="2"/>
                     </group>
                     <group string="Ordonnance">
                         <field name="medicament_ids" widget="many2many_tags" string="Médicaments prescrits"/>
@@ -47,15 +54,18 @@
         <field name="name">medical.consultation.list</field>
         <field name="model">medical.consultation</field>
         <field name="arch" type="xml">
-            <list string="Consultations">
+            <list string="Consultations"
+                  decoration-success="etat == 'termine'"
+                  decoration-info="etat == 'en_cours'">
                 <field name="date"/>
                 <field name="patient_id"/>
                 <field name="medecin_id"/>
                 <field name="diagnostic"/>
                 <field name="medicament_ids" widget="many2many_tags"/>
                 <field name="tarif_consultation"/>
-               
-                <field name="etat" widget="badge"/>
+                <field name="etat" widget="badge"
+                       decoration-success="etat == 'termine'"
+                       decoration-info="etat == 'en_cours'"/>
             </list>
         </field>
     </record>
@@ -82,4 +92,5 @@
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_medical_consultation_search"/>
     </record>
+
 </odoo>

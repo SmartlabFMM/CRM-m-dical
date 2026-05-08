@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import UserError  
 
 
-class Medicalfacture(models.Model):
+class MedicalFacture(models.Model):
     _name = 'medical.facture'
     _description = 'Facture médicale'
     _inherit = ['mail.thread']
     _order = 'date_facture desc'
-
+ 
     reference = fields.Char(
         string='Référence',
         readonly=True,
@@ -23,78 +24,114 @@ class Medicalfacture(models.Model):
         string='Patient',
         required=True
     )
+    # ─── FIX PROBLÈME 8 ─────────────────────────────────────
+    # store=True : le champ est sauvegardé en base de données
+    # Sans ça, l'assurance disparaît à l'affichage
     assurance_id = fields.Many2one(
         'medical.assurance',
-        string='Assurance'
+        string='Assurance',
+        store=True
     )
     date_facture = fields.Date(
         string='Date facture',
         default=fields.Date.today
     )
-
-   
-    # Avant : c'était aussi computed mais sans source → restait à 0
-    # Maintenant : la valeur vient de creer_facture() via tarif_consultation
-    # Et reste modifiable manuellement si besoin
+ 
     montant_total = fields.Float(
         string='Montant total (TND)',
         default=0.0,
-        tracking=True,  # Trace les changements dans le chatter
+        tracking=True,
     )
-
-    # Ces deux champs sont calculés automatiquement depuis montant_total + assurance
+ 
     montant_assurance = fields.Float(
         string='Part assurance (TND)',
         compute='_calculer_montants',
-        store=True      # Stocké en base pour les recherches et rapports
+        store=True
     )
     montant_patient = fields.Float(
         string='Part patient (TND)',
         compute='_calculer_montants',
         store=True
     )
-
+ 
     etat = fields.Selection([
         ('brouillon', 'Brouillon'),
         ('valide',    'Validée'),
         ('payee',     'Payée'),
         ('annulee',   'Annulée'),
     ], string='État', default='brouillon', tracking=True)
-
-    @api.model
-    def create(self, vals_list):
-        for vals in vals_list:
-            if vals.get('reference', 'Nouveau') == 'Nouveau':
-                vals['reference'] = self.env['ir.sequence'].next_by_code(
-                    'medical.facture'
-                ) or 'Nouveau'
-        return super().create(vals_list)
-
-    
-    # @api.depends liste les champs qui déclenchent le recalcul automatique
-    # Avant : fonctionnait mais montant_total était toujours 0 donc inutile
+ 
+    # ─── FIX PROBLÈME 6 & 7 ─────────────────────────────────
+    # AVANT : quand on choisissait une consultation, patient et montant
+    #         restaient vides → erreur "Missing required fields"
+    # APRÈS : onchange sur consultation_id remplit tout automatiquement
+    @api.onchange('consultation_id')
+    def _onchange_consultation(self):
+        if self.consultation_id:
+            self.patient_id    = self.consultation_id.patient_id
+            self.montant_total = self.consultation_id.tarif_consultation
+            if self.consultation_id.patient_id.assurance_id:
+                self.assurance_id = self.consultation_id.patient_id.assurance_id
+ 
     @api.depends('montant_total', 'assurance_id', 'assurance_id.taux_couverture')
     def _calculer_montants(self):
         for rec in self:
             if rec.assurance_id and rec.montant_total:
-                # Calcul de la part prise en charge par l'assurance
                 taux = rec.assurance_id.taux_couverture / 100
                 rec.montant_assurance = rec.montant_total * taux
-                # Ce que le patient doit payer = total - part assurance
                 rec.montant_patient   = rec.montant_total - rec.montant_assurance
             else:
-                # Pas d'assurance → le patient paie tout
                 rec.montant_assurance = 0.0
                 rec.montant_patient   = rec.montant_total
-
-    
-    # Avant : appelait _calculer_montants() mais montant_total était à 0
-    # Maintenant : utile si l'utilisateur modifie montant_total manuellement
+ 
+    @api.model
+    def create(self, vals_list):
+        for vals in vals_list:
+            # Génération automatique de la référence (FAC/2026/0001)
+            if vals.get('reference', 'Nouveau') == 'Nouveau':
+                vals['reference'] = self.env['ir.sequence'].next_by_code(
+                    'medical.facture'
+                ) or 'Nouveau'
+ 
+            # ─── FIX PROBLÈME 6 & 7 (création depuis terminer()) ────
+            # Quand la facture est créée programmatiquement depuis terminer(),
+            # on s'assure que patient et montant sont bien remplis
+            if vals.get('consultation_id') and not vals.get('patient_id'):
+                consultation = self.env['medical.consultation'].browse(
+                    vals['consultation_id']
+                )
+                vals['patient_id']    = consultation.patient_id.id
+                vals['montant_total'] = consultation.tarif_consultation
+                if consultation.patient_id.assurance_id:
+                    vals['assurance_id'] = consultation.patient_id.assurance_id.id
+ 
+        return super().create(vals_list)
+ 
     def calculer_montants(self):
+        """Bouton 'Recalculer' dans le formulaire."""
         self._calculer_montants()
-
+ 
+    # ─── FIX PROBLÈME 4 ─────────────────────────────────────
     def valider(self):
         self.etat = 'valide'
-
+ 
     def payer(self):
         self.etat = 'payee'
+ 
+    # ─── FIX PROBLÈME 5 ─────────────────────────────────────
+    def retour_brouillon(self):
+        """Validée → Brouillon si erreur avant paiement."""
+        if self.etat == 'valide':
+            self.etat = 'brouillon'
+ 
+    def retour_valide(self):
+        """Payée → Validée si clic 'Payée' par erreur."""
+        if self.etat == 'payee':
+            self.etat = 'valide'
+    def unlink(self):
+        for facture in self:
+            if facture.etat == 'valide':
+                raise UserError("Facture validée, suppression impossible.")
+            if facture.etat == 'payee':
+                raise UserError("Facture déjà réglée, suppression impossible.")
+        return super(MedicalFacture, self).unlink()
