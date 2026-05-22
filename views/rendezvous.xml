@@ -6,27 +6,25 @@
         <field name="arch" type="xml">
             <form string="Rendez-vous">
                 <header>
-                    <!-- Workflow : ouvre directement la consultation -->
                     <button name="action_creer_consultation"
                             string="Créer Consultation"
                             type="object"
                             class="btn-primary"
-                            invisible="etat != 'confirme'"/>
-
-                    <!-- Confirmé → Terminé -->
+                            invisible="etat != 'confirme'"
+                            groups="smartlab.group_smartlab_doctor"/>
                     <button name="terminer" string="Terminer" type="object"
                             class="btn-secondary"
-                            invisible="etat != 'confirme'"/>
- 
-                    <!-- Confirmé → Annulé -->
+                            invisible="etat != 'confirme'"
+                            groups="smartlab.group_smartlab_secretary,smartlab.group_smartlab_admin"/>
                     <button name="annuler" string="Annuler" type="object"
-                            invisible="etat != 'confirme'"/>
- 
-                    <!-- FIX PROBLÈME 5 : retour arrière depuis Terminé ou Annulé -->
-                    <button name="confirmer" string="🔙 Rétablir Confirmé" type="object"
+                            invisible="etat != 'confirme'"
+                            groups="smartlab.group_smartlab_secretary,smartlab.group_smartlab_admin"/>
+
+                    <button name="confirmer" string=" Rétablir Confirmé" type="object"
                             class="btn-secondary"
-                            invisible="etat not in ['annule', 'termine']"/>
- 
+                            invisible="etat not in ['annule', 'termine']"
+                            groups="smartlab.group_smartlab_secretary,smartlab.group_smartlab_admin"/>
+
                     <field name="etat" widget="statusbar"
                            statusbar_visible="confirme,termine,annule"/>
                 </header>
@@ -46,35 +44,33 @@
                     <group string="Motif">
                         <field name="motif" nolabel="1"/>
                     </group>
- 
-                    <!-- Triage ML — Random Forest 94% -->
-                    <group string="Triage Intelligent — Modèle ML (Random Forest 94%)">
-                        <field name="priorite_ml"
+
+                    <group string="Triage Intelligent ">
+                        <field name="priorite_score"
                                widget="badge"
-                               decoration-danger="priorite_ml == 'urgent'"
-                               decoration-warning="priorite_ml == 'prioritaire'"
-                               decoration-success="priorite_ml == 'normal'"/>
+                               decoration-danger="priorite_score== 'urgent'"
+                               decoration-warning="priorite_score== 'prioritaire'"
+                               decoration-success="priorite_score== 'normal'"/>
                     </group>
- 
-                    <!-- Consultations liées -->
-                    <notebook>
-                        <page string="Consultations" name="consultations">
-                            <field name="consultation_ids" readonly="1">
-                                <list>
-                                    <field name="date"/>
-                                    <field name="diagnostic"/>
-                                    <field name="tarif_consultation"/>
-                                    <field name="etat" widget="badge"/>
-                                </list>
-                            </field>
-                        </page>
-                    </notebook>
+
+<notebook>
+    <page string="Consultations" name="consultations">
+        <field name="consultation_ids" readonly="1">
+            <list>
+                <field name="date"/>
+                <field name="diagnostic"/>
+                <field name="tarif_consultation"/>
+                <field name="etat" widget="badge"/>
+            </list>
+        </field>
+    </page>
+</notebook>
                 </sheet>
                 <chatter/>
             </form>
         </field>
     </record>
- 
+
     <record id="view_medical_rendezvous_list" model="ir.ui.view">
         <field name="name">medical.rendezvous.list</field>
         <field name="model">medical.rendezvous</field>
@@ -92,14 +88,14 @@
                        decoration-success="etat == 'termine'"
                        decoration-warning="etat == 'confirme'"
                        decoration-danger="etat == 'annule'"/>
-                <field name="priorite_ml" widget="badge"
-                       decoration-danger="priorite_ml == 'urgent'"
-                       decoration-warning="priorite_ml == 'prioritaire'"
-                       decoration-success="priorite_ml == 'normal'"/>
+                <field name="priorite_score" widget="badge"
+                       decoration-danger="priorite_score== 'urgent'"
+                       decoration-warning="priorite_score== 'prioritaire'"
+                       decoration-success="priorite_score== 'normal'"/>
             </list>
         </field>
     </record>
- 
+
     <record id="view_medical_rendezvous_calendar" model="ir.ui.view">
         <field name="name">medical.rendezvous.calendar</field>
         <field name="model">medical.rendezvous</field>
@@ -111,7 +107,7 @@
             </calendar>
         </field>
     </record>
- 
+
     <record id="view_medical_rendezvous_search" model="ir.ui.view">
         <field name="name">medical.rendezvous.search</field>
         <field name="model">medical.rendezvous</field>
@@ -128,22 +124,22 @@
                         domain="[('etat','=','annule')]"/>
                 <separator/>
                 <filter string="🔴 Urgent"      name="urgent"
-                        domain="[('priorite_ml','=','urgent')]"/>
+                        domain="[('priorite_score','=','urgent')]"/>
                 <filter string="🟡 Prioritaire" name="prioritaire"
-                        domain="[('priorite_ml','=','prioritaire')]"/>
+                        domain="[('priorite_score','=','prioritaire')]"/>
                 <filter string="🟢 Normal"      name="normal"
-                        domain="[('priorite_ml','=','normal')]"/>
+                        domain="[('priorite_score','=','normal')]"/>
                 <separator/>
                 <filter name="par_medecin" string="Médecin"
                         context="{'group_by': 'medecin_id'}"/>
                 <filter name="par_patient" string="Patient"
                         context="{'group_by': 'patient_id'}"/>
-                <filter name="par_priorite" string="Priorité ML"
-                        context="{'group_by': 'priorite_ml'}"/>
+                <filter name="par_priorite" string="Priorité score"
+                        context="{'group_by': 'priorite_score'}"/>
             </search>
         </field>
     </record>
- 
+
     <record id="action_medical_rendezvous" model="ir.actions.act_window">
         <field name="name">Rendez-vous</field>
         <field name="res_model">medical.rendezvous</field>

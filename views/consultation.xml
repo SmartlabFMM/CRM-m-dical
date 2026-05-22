@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <record id="view_medical_consultation_form" model="ir.ui.view">
+
+    <record id="view_medical_consultation_form" model="ir.ui.view">
         <field name="name">medical.consultation.form</field>
         <field name="model">medical.consultation</field>
         <field name="arch" type="xml">
             <form string="Consultation">
                 <header>
+                 
                     <button name="terminer" string="Terminer" type="object"
                             class="btn-primary"
                             invisible="etat != 'en_cours'"/>
@@ -15,9 +17,7 @@
                             type="object" class="btn-secondary"
                             invisible="etat != 'termine'"/>
 
-                    <button name="creer_facture" string="Créer Facture" type="object"
-                            class="btn-success"
-                            invisible="etat != 'termine' or facture_id != False"/>
+               
 
                     <field name="etat" widget="statusbar" statusbar_visible="en_cours,termine"/>
                 </header>
@@ -34,13 +34,17 @@
                             <field name="facture_id" readonly="1"/>
                         </group>
                     </group>
+
                     <group string="Compte rendu médical">
                         <field name="symptomes" placeholder="Symptômes constatés..." nolabel="1"/>
                         <field name="diagnostic" placeholder="Diagnostic du médecin..." nolabel="1"/>
-                        <field name="pieces_jointes" widget="many2many_binary" string="Documents / Images" nolabel="0" colspan="2"/>
+                        <field name="pieces_jointes" widget="many2many_binary"
+                               string="Documents / Images" nolabel="0" colspan="2"/>
                     </group>
+
                     <group string="Ordonnance">
-                        <field name="medicament_ids" widget="many2many_tags" string="Médicaments prescrits"/>
+                        <field name="medicament_ids" widget="many2many_tags"
+                               string="Médicaments prescrits"/>
                         <field name="posologie" placeholder="Ex: 1 comprimé matin et soir..." nolabel="1"/>
                         <field name="duree_traitement"/>
                     </group>
@@ -49,6 +53,7 @@
             </form>
         </field>
     </record>
+
 
     <record id="view_medical_consultation_list" model="ir.ui.view">
         <field name="name">medical.consultation.list</field>
@@ -70,6 +75,7 @@
         </field>
     </record>
 
+   
     <record id="view_medical_consultation_search" model="ir.ui.view">
         <field name="name">medical.consultation.search</field>
         <field name="model">medical.consultation</field>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class MedicalDoctor(models.Model):
@@ -8,7 +9,7 @@ class MedicalDoctor(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
 
-    # ─ Identification 
+    # ─ Identification
     reference = fields.Char(
         string='Référence', copy=False, readonly=True, default='Nouveau'
     )
@@ -19,21 +20,22 @@ class MedicalDoctor(models.Model):
         ('female', 'Féminin'),
     ], string='Sexe')
 
-    #  Professionnel 
+    # ─ Professionnel
     specialty_id = fields.Many2one(
         'medical.specialty', string='Spécialité', required=True, tracking=True
     )
     license_number = fields.Char(string='Numéro d\'ordre')
     years_experience = fields.Integer(string='Années d\'expérience')
     tarif_consultation = fields.Float(
-    string='Tarif consultation (TND)',
-    default=0.0,
-)
-    #─ Contact 
+        string='Tarif consultation (TND)',
+        default=0.0,
+    )
+
+    # ─ Contact
     phone = fields.Char(string='Téléphone')
     email = fields.Char(string='Email')
-    
-    #  Planning 
+
+    # ─ Planning
     room_id = fields.Many2one('medical.room', string='Salle assignée')
     consultation_duration = fields.Integer(
         string='Durée consultation (min)', default=30
@@ -47,7 +49,17 @@ class MedicalDoctor(models.Model):
         ('inactive', 'Inactif'),
     ], string='Statut', default='active', tracking=True)
 
-    #  Séquence automatique 
+    # ─ Contrainte : salle en maintenance
+    @api.constrains('room_id')
+    def _check_room_available(self):
+        for rec in self:
+            if rec.room_id and rec.room_id.state == 'maintenance':
+                raise ValidationError(
+                    "Impossible d'assigner la salle « %s » : elle est en maintenance."
+                    % rec.room_id.name
+                )
+
+    # ─ Séquence automatique
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -55,13 +67,12 @@ class MedicalDoctor(models.Model):
                 vals['reference'] = self.env['ir.sequence'].next_by_code('medical.doctor') or 'Nouveau'
         return super().create(vals_list)
 
-    #  Actions état 
-    def action_set_active(self):      
+    # ─ Actions état
+    def action_set_active(self):
         self.state = 'active'
 
-    def action_set_on_leave(self):     
+    def action_set_on_leave(self):
         self.state = 'on_leave'
 
-def action_set_inactive(self):      
-    self.state = 'inactive'
-
+    def action_set_inactive(self):
+        self.state = 'inactive'
